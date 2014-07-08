@@ -20,4 +20,5 @@ namespace tesseract {
 
 - (id)initWithOptions:(NSDictionary*)options;
 - (NSString *)scan:(id)image;
+- (NSString *)scanHOCR:(id)image;
 @end

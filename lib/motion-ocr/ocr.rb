@@ -5,8 +5,11 @@ module Motion
       @motion_ocr = MotionOCR.alloc.initWithOptions stringify(options)
     end
 
-    def scan(image)
-      @motion_ocr.scan image
+    def scan(image, options={})
+      case options[:format]
+      when :hocr then @motion_ocr.scanHOCR image
+      else @motion_ocr.scan image
+      end
     end
 
     private

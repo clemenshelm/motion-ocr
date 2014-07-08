@@ -64,6 +64,21 @@
     return result;
 }
 
+- (NSString *)scanHOCR:(id)image
+{
+    [self setTesseractImage:(CGImageRef)image];
+
+    tesseract->Recognize(NULL);
+    /*  Calling SetInputName may not be required for newer versions of
+        Tesseract anymore.
+        (see https://code.google.com/p/tesseract-ocr/issues/detail?id=463) */
+    tesseract->SetInputName("");
+    char* utf8Text = tesseract->GetHOCRText(0);
+    NSString *result = [NSString stringWithUTF8String:utf8Text];
+
+    return result;
+}
+
 - (void)setTesseractImage:(CGImageRef)image
 {
     free(pixels);

@@ -36,6 +36,14 @@ describe Motion::OCR do
     EOF
   end
 
+  it "can produce hocr output" do
+    ocr = Motion::OCR.new
+
+    hocr = ocr.scan image('phototest'), format: :hocr
+    hocr.match %r{<span class='ocrx_word'[^>]*>(\w+)</span>}
+    $1.should == "This"
+  end
+
   it "still works with the old constructor" do
     ocr = MotionOCR.new
 
