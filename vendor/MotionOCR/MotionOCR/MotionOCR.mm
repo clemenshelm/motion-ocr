@@ -55,28 +55,29 @@
 
 - (NSString *)scan:(id)image
 {
-    [self setTesseractImage:(CGImageRef)image];
-
-    tesseract->Recognize(NULL);
-    char* utf8Text = tesseract->GetUTF8Text();
-    NSString *result = [NSString stringWithUTF8String:utf8Text];
-
-    return result;
+    return [self scanImage:image usingBlock:^{
+        return tesseract->GetUTF8Text();
+    }];
 }
 
 - (NSString *)scanHOCR:(id)image
 {
+    return [self scanImage:image usingBlock:^{
+        /*  Calling SetInputName may not be required for newer versions of
+            Tesseract anymore.
+            (see https://code.google.com/p/tesseract-ocr/issues/detail?id=463) */
+        tesseract->SetInputName("");
+        return tesseract->GetHOCRText(0);
+    }];
+}
+
+- (NSString *)scanImage:(id)image usingBlock:(char *(^)(void))outputBlock {
     [self setTesseractImage:(CGImageRef)image];
 
     tesseract->Recognize(NULL);
-    /*  Calling SetInputName may not be required for newer versions of
-        Tesseract anymore.
-        (see https://code.google.com/p/tesseract-ocr/issues/detail?id=463) */
-    tesseract->SetInputName("");
-    char* utf8Text = tesseract->GetHOCRText(0);
-    NSString *result = [NSString stringWithUTF8String:utf8Text];
 
-    return result;
+    char* utf8Text = outputBlock();
+    return [NSString stringWithUTF8String:utf8Text];
 }
 
 - (void)setTesseractImage:(CGImageRef)image
