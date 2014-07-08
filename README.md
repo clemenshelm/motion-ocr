@@ -35,3 +35,9 @@ Put the language file (e.g., `spa.traineddata`) into your app's
 Then pass the language to MotionOCR:
 
     ocr = Motion::OCR.new language: 'spa'
+
+### HOCR
+
+Instead of just plain text, you can retrieve Tesseract's HOCR output:
+
+    ocr.scan(image_with_text, format: :hocr)
