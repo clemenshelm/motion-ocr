@@ -18,9 +18,10 @@ Motion::Project::App.setup do |app|
     app.files.insert(insert_point, file)
   end
 
-  motion_ocr_vendor = File.expand_path(File.join(File.dirname(__FILE__), '../vendor/MotionOCR'))
-  app.vendor_project( motion_ocr_vendor,
-                      :xcode,
-                      :headers_dir => 'MotionOCR' )
+  app.libs << '-lstdc++'
 
+  app.frameworks << 'libstdc++.6.0.9.dylib'
+
+  app.pods ||= Motion::Project::CocoaPods.new(app)
+  app.pods.dependency 'TesseractOCRiOS', '~> 2.2'#, git: 'https://github.com/clemenshelm/Tesseract-OCR-iOS'
 end

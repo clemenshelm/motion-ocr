@@ -2,13 +2,16 @@ module Motion
   class OCR
     def initialize(options={})
       options[:language] ||= "eng"
-      @motion_ocr = MotionOCR.alloc.initWithOptions stringify(options)
+      options = stringify(options)
+      @tesseract = Tesseract.alloc.initWithLanguage options[:english]
     end
 
     def scan(image, options={})
+      @tesseract.setImage(image)
+
       case options[:format]
-      when :hocr then @motion_ocr.scanHOCR image
-      else @motion_ocr.scan image
+      when :hocr then @tesseract.recognizedText
+      else @motion_ocr.recognizedHOCR
       end
     end
 
