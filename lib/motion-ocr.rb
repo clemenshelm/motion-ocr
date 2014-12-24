@@ -22,5 +22,6 @@ Motion::Project::App.setup do |app|
   app.vendor_project( motion_ocr_vendor,
                       :xcode,
                       :headers_dir => 'MotionOCR' )
+  app.libs << '/usr/lib/libstdc++.dylib'
 
 end
