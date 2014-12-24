@@ -24,4 +24,8 @@ Motion::Project::App.setup do |app|
                       :headers_dir => 'MotionOCR' )
   app.libs << '/usr/lib/libstdc++.dylib'
 
+  if app.archs['iPhoneSimulator'].include?('x86_64')
+    Motion::Project::App.warn 'Removing 64-bit support from simulator build, because the vendored version of Tesseract does not support it.'
+    app.archs['iPhoneSimulator'].delete('x86_64')
+  end
 end
